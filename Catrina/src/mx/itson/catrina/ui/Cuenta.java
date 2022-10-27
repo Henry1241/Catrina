@@ -8,7 +8,6 @@ package mx.itson.catrina.ui;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.catrina.entidades.Catrina;
@@ -264,11 +263,7 @@ public class Cuenta extends javax.swing.JFrame {
                 modelo1.addRow(new Object[] {catrina.getCliente().getCiudad()});
                 modelo1.addRow(new Object[] {catrina.getCliente().getCp()});
                 
-                Producto producto = (Producto) catrina.getProductos();
-                modelo2.addRow(new Object[] {producto.getCuenta()});
-                modelo2.addRow(new Object[] {producto.getClabe()});
-                modelo2.addRow(new Object[] {producto.getMoneda()}); 
-           
+                
             }
                 
         }catch (Exception ex){
