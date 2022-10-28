@@ -8,11 +8,16 @@ package mx.itson.catrina.ui;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
-import mx.itson.catrina.entidades.Catrina;
+import mx.itson.catrina.entidades.estadoCuenta;
 import mx.itson.catrina.entidades.Cliente;
 import mx.itson.catrina.entidades.Producto;
+import mx.itson.catrina.enumeradores.Movimientos;
 
 /**
  *
@@ -116,24 +121,24 @@ public class Cuenta extends javax.swing.JFrame {
 
         tblDetalle.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "FECHA", "DEPÓSITO", "RETIRO", "SUBTOTAL"
+                "FECHA", "DESCRIPCIÓN", "DEPÓSITO", "RETIRO", "SUBTOTAL"
             }
         ));
         jScrollPane4.setViewportView(tblDetalle);
@@ -249,22 +254,32 @@ public class Cuenta extends javax.swing.JFrame {
                 
                 String cuenta = new String(archivoByte, StandardCharsets.UTF_8);
                 
-                Catrina catrina = new Catrina().deserializar(cuenta);
+                estadoCuenta estado = new estadoCuenta().deserializar(cuenta);
+                
+                Producto producto = new Producto();
+                
+                DateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                 
                 DefaultTableModel modelo1 = (DefaultTableModel) tblMario.getModel();
                 modelo1.setRowCount(0);
                 
-                DefaultTableModel modelo2 = (DefaultTableModel) tblCuenta.getModel();
+                DefaultTableModel modelo2 = (DefaultTableModel) tblDetalle.getModel();
                 modelo2.setRowCount(0);
                 
-                Cliente cliente = (Cliente) catrina.getCliente();
-                modelo1.addRow(new Object[] {catrina.getCliente().getRfc()});
-                modelo1.addRow(new Object[] {catrina.getCliente().getDomicilio()});
-                modelo1.addRow(new Object[] {catrina.getCliente().getCiudad()});
-                modelo1.addRow(new Object[] {catrina.getCliente().getCp()});
+                Cliente cliente = (Cliente) estado.getCliente();
+                modelo1.addRow(new Object[] {estado.getCliente().getRfc()});
+                modelo1.addRow(new Object[] {estado.getCliente().getDomicilio()});
+                modelo1.addRow(new Object[] {estado.getCliente().getCiudad()});
+                modelo1.addRow(new Object[] {estado.getCliente().getCp()});
                 
+                List<Producto> productos = new ArrayList<>();
                 
+                estado.getMovimientos().sort((mov1, mov2) -> mov1.getFecha().compareTo(mov2.getFecha()));       
+                for (Producto p : estado.getMovimientos()){
+                    modelo2.addRow(new Object[] { formato.format(p.getFecha()), p.getDescripcion(), Movimientos.DEPOSITO, Movimientos.RETIRO, p.getCantidad()}); 
+                }
             }
+        
                 
         }catch (Exception ex){
              System.err.println("Ocurrio un error " + ex.getMessage());

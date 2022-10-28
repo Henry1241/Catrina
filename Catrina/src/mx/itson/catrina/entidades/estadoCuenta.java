@@ -12,17 +12,16 @@ import java.util.List;
  *
  * @author enri0
  */
-public class Catrina {
+public class estadoCuenta {
 
     private Cliente cliente;
-    private List<Producto> productos;
-    private Catrina datos;
+    private List<Producto> movimientos;
    
     
-    public Catrina deserializar(String json){
-        Catrina catrina = new Catrina();
+    public estadoCuenta deserializar(String json){
+        estadoCuenta catrina = new estadoCuenta();
         try{
-            catrina = new Gson().fromJson(json, Catrina.class);
+            catrina = new Gson().fromJson(json, estadoCuenta.class);
         }catch(Exception ex){
             System.err.println("Ocurrio un error" + ex.getMessage());
         }
@@ -37,10 +36,10 @@ public class Catrina {
     }
 
     /**
-     * @return the productos
+     * @return the movimientos
      */
-    public List<Producto> getProductos() {
-       return productos;
+    public List<Producto> getMovimientos() {
+       return movimientos;
         
     }
 
@@ -55,21 +54,7 @@ public class Catrina {
      * @param producto
      */
     public void setEstado(List<Producto> producto) {
-        this.productos = producto;
-    }
-    
-    /**
-     * @return the datos
-     */
-    public Catrina getDatos() {
-        return datos;
-    }
-
-    /**
-     * @param datos the datos to set
-     */
-    public void setDatos(Catrina datos) {
-        this.datos = datos;
+        this.movimientos = producto;
     }
     
 }

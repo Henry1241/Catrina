@@ -5,71 +5,74 @@
  */
 package mx.itson.catrina.entidades;
 
+import java.util.Date;
+import mx.itson.catrina.enumeradores.Movimientos;
+
 /**
  *
  * @author enri0
  */
 public class Producto {
 
-   private String cuenta;
-   private String clabe;
-   private String moneda;
-   private Cliente cliente;
+   private Date fecha;
+   private String descripcion;
+   private double cantidad;
+   private Movimientos tipo;
    
     /**
-     * @return the clabe
+     * @return the descripcion
      */
-    public String getClabe() {
-        return clabe;
+    public String getDescripcion() {
+        return descripcion;
     }
 
     /**
-     * @return the cliente
+     * @return the tipo
      */
-    public Cliente getCliente() {
-        return cliente;
+    public Movimientos getTipo() {
+        return tipo;
     }
 
     /**
-     * @return the cuenta
+     * @return the fecha
      */
-    public String getCuenta() {
-        return cuenta;
+    public Date getFecha() {
+        return fecha;
     }
 
     /**
-     * @return the moneda
+     * @return the cantidad
      */
-    public String getMoneda() {
-        return moneda;
+    public double getCantidad() {
+        return cantidad;
     }
 
     /**
-     * @param clabe the clabe to set
+     * @param descripcion the descripcion to set
      */
-    public void setClabe(String clabe) {
-        this.clabe = clabe;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     /**
-     * @param cliente the cliente to set
+     * @param tipo the tipo to set
      */
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setTipo(Movimientos tipo) {
+        this.tipo = tipo;
     }
 
     /**
-     * @param cuenta the cuenta to set
+     * @param fecha the fecha to set
      */
-    public void setCuenta(String cuenta) {
-        this.cuenta = cuenta;
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     /**
-     * @param moneda the moneda to set
+     * @param cantidad the cantidad to set
      */
-    public void setMoneda(String moneda) {
-        this.moneda = moneda;
+    public void setCantidad(double cantidad) {
+        this.cantidad = cantidad;
     }
     
    
