@@ -121,24 +121,24 @@ public class Cuenta extends javax.swing.JFrame {
 
         tblDetalle.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "FECHA", "DESCRIPCIÓN", "DEPÓSITO", "RETIRO", "SUBTOTAL"
+                "FECHA", "DESCRIPCIÓN", "DEPÓSITO/RETIRO", "SUBTOTAL"
             }
         ));
         jScrollPane4.setViewportView(tblDetalle);
@@ -276,7 +276,7 @@ public class Cuenta extends javax.swing.JFrame {
                 
                 estado.getMovimientos().sort((mov1, mov2) -> mov1.getFecha().compareTo(mov2.getFecha()));       
                 for (Producto p : estado.getMovimientos()){
-                    modelo2.addRow(new Object[] { formato.format(p.getFecha()), p.getDescripcion(), Movimientos.DEPOSITO, Movimientos.RETIRO, p.getCantidad()}); 
+                    modelo2.addRow(new Object[] { formato.format(p.getFecha()), p.getDescripcion(), p.getTipo(), p.getCantidad()}); 
                 }
             }
         
