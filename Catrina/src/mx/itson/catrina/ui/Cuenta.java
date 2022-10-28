@@ -9,6 +9,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,8 @@ import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.catrina.entidades.estadoCuenta;
 import mx.itson.catrina.entidades.Cliente;
-import mx.itson.catrina.entidades.Producto;
-import mx.itson.catrina.enumeradores.Movimientos;
+import mx.itson.catrina.entidades.Movimiento;
+import mx.itson.catrina.enumeradores.Tipo;
 
 /**
  *
@@ -56,7 +57,7 @@ public class Cuenta extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         tblDetalle = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        lblFinal = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -145,11 +146,9 @@ public class Cuenta extends javax.swing.JFrame {
 
         jLabel5.setText("SALDO FINAL DEL PERIODO $");
 
-        jLabel6.setText("jLabel6");
-
         jLabel7.setText("CUENTA");
 
-        jLabel8.setText("CLAVE");
+        jLabel8.setText("CLABE");
 
         jLabel9.setText("MONEDA");
 
@@ -199,7 +198,7 @@ public class Cuenta extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel6)
+                .addComponent(lblFinal)
                 .addGap(116, 116, 116))
         );
         layout.setVerticalGroup(
@@ -235,7 +234,7 @@ public class Cuenta extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6))
+                    .addComponent(lblFinal))
                 .addGap(152, 152, 152))
         );
 
@@ -252,32 +251,37 @@ public class Cuenta extends javax.swing.JFrame {
                 
                 byte archivoByte[] = Files.readAllBytes(archivo.toPath());
                 
-                String cuenta = new String(archivoByte, StandardCharsets.UTF_8);
+                String contenido = new String(archivoByte, StandardCharsets.UTF_8);
                 
-                estadoCuenta estado = new estadoCuenta().deserializar(cuenta);
+                estadoCuenta estado = new estadoCuenta().deserializar(contenido);
                 
-                Producto producto = new Producto();
+                Movimiento producto = new Movimiento();
                 
                 DateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                 
                 DefaultTableModel modelo1 = (DefaultTableModel) tblMario.getModel();
                 modelo1.setRowCount(0);
                 
-                DefaultTableModel modelo2 = (DefaultTableModel) tblDetalle.getModel();
+                DefaultTableModel modelo2 = (DefaultTableModel) tblCuenta.getModel();
                 modelo2.setRowCount(0);
                 
-                Cliente cliente = (Cliente) estado.getCliente();
+                DefaultTableModel modelo3 = (DefaultTableModel) tblDetalle.getModel();
+                modelo3.setRowCount(0);
+                
                 modelo1.addRow(new Object[] {estado.getCliente().getRfc()});
                 modelo1.addRow(new Object[] {estado.getCliente().getDomicilio()});
                 modelo1.addRow(new Object[] {estado.getCliente().getCiudad()});
                 modelo1.addRow(new Object[] {estado.getCliente().getCp()});
                 
-                List<Producto> productos = new ArrayList<>();
+                modelo2.addRow(new Object[] {estado.getCuenta()});
+                modelo2.addRow(new Object[] {estado.getClabe()});
+                modelo2.addRow(new Object[] {estado.getMoneda()});
                 
                 estado.getMovimientos().sort((mov1, mov2) -> mov1.getFecha().compareTo(mov2.getFecha()));       
-                for (Producto p : estado.getMovimientos()){
-                    modelo2.addRow(new Object[] { formato.format(p.getFecha()), p.getDescripcion(), p.getTipo(), p.getCantidad()}); 
+                for (Movimiento p : estado.getMovimientos()){
+                    modelo3.addRow(new Object[] { formato.format(p.getFecha()), p.getDescripcion(), p.getTipo(), p.getCantidad()}); 
                 }
+                
             }
         
                 
@@ -329,7 +333,6 @@ public class Cuenta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -337,6 +340,7 @@ public class Cuenta extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JLabel lblFinal;
     private javax.swing.JTable tblCuenta;
     private javax.swing.JTable tblDetalle;
     private javax.swing.JTable tblMario;

@@ -6,43 +6,74 @@
 package mx.itson.catrina.entidades;
 
 import java.util.Date;
+import mx.itson.catrina.enumeradores.Tipo;
 
 /**
  *
  * @author enri0
  */
 public class Movimiento {
-    
-    private double monto;
-    private Date Fecha;
 
+   private Date fecha;
+   private String descripcion;
+   private double cantidad;
+   private Tipo tipo;
+   
     /**
-     * @return the monto
+     * @return the descripcion
      */
-    public double getMonto() {
-        return monto;
+    public String getDescripcion() {
+        return descripcion;
     }
 
     /**
-     * @param monto the monto to set
+     * @return the tipo
      */
-    public void setMonto(double monto) {
-        this.monto = monto;
+    public Tipo getTipo() {
+        return tipo;
     }
 
     /**
-     * @return the Fecha
+     * @return the fecha
      */
     public Date getFecha() {
-        return Fecha;
+        return fecha;
     }
 
     /**
-     * @param Fecha the Fecha to set
+     * @return the cantidad
      */
-    public void setFecha(Date Fecha) {
-        this.Fecha = Fecha;
+    public double getCantidad() {
+        return cantidad;
+    }
+
+    /**
+     * @param descripcion the descripcion to set
+     */
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    /**
+     * @param tipo the tipo to set
+     */
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
+
+    /**
+     * @param fecha the fecha to set
+     */
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    /**
+     * @param cantidad the cantidad to set
+     */
+    public void setCantidad(double cantidad) {
+        this.cantidad = cantidad;
     }
     
-    
+   
 }

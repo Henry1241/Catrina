@@ -14,8 +14,11 @@ import java.util.List;
  */
 public class estadoCuenta {
 
+    private String cuenta;
+    private String clabe;
+    private String moneda;
     private Cliente cliente;
-    private List<Producto> movimientos;
+    private List<Movimiento> movimientos;
    
     
     public estadoCuenta deserializar(String json){
@@ -38,7 +41,7 @@ public class estadoCuenta {
     /**
      * @return the movimientos
      */
-    public List<Producto> getMovimientos() {
+    public List<Movimiento> getMovimientos() {
        return movimientos;
         
     }
@@ -53,8 +56,49 @@ public class estadoCuenta {
     /**
      * @param producto
      */
-    public void setEstado(List<Producto> producto) {
+    public void setEstado(List<Movimiento> producto) {
         this.movimientos = producto;
+    }
+    /**
+     * @return the cuenta
+     */
+    public String getCuenta() {
+        return cuenta;
+    }
+
+    /**
+     * @param cuenta the cuenta to set
+     */
+    public void setCuenta(String cuenta) {
+        this.cuenta = cuenta;
+    }
+
+    /**
+     * @return the clabe
+     */
+    public String getClabe() {
+        return clabe;
+    }
+
+    /**
+     * @param clabe the clabe to set
+     */
+    public void setClabe(String clabe) {
+        this.clabe = clabe;
+    }
+
+    /**
+     * @return the moneda
+     */
+    public String getMoneda() {
+        return moneda;
+    }
+
+    /**
+     * @param moneda the moneda to set
+     */
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
     }
     
 }
