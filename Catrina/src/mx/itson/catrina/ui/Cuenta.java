@@ -9,14 +9,10 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.catrina.entidades.estadoCuenta;
-import mx.itson.catrina.entidades.Cliente;
 import mx.itson.catrina.entidades.Movimiento;
 import mx.itson.catrina.enumeradores.Tipo;
 
@@ -122,24 +118,24 @@ public class Cuenta extends javax.swing.JFrame {
 
         tblDetalle.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "FECHA", "DESCRIPCIÓN", "DEPÓSITO/RETIRO", "SUBTOTAL"
+                "FECHA", "DESCRIPCIÓN", "DEPÓSITO", "RETIRO", "SUBTOTAL"
             }
         ));
         jScrollPane4.setViewportView(tblDetalle);
@@ -257,6 +253,7 @@ public class Cuenta extends javax.swing.JFrame {
                 
                 Movimiento producto = new Movimiento();
                 
+                
                 DateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                 
                 DefaultTableModel modelo1 = (DefaultTableModel) tblMario.getModel();
@@ -278,8 +275,13 @@ public class Cuenta extends javax.swing.JFrame {
                 modelo2.addRow(new Object[] {estado.getMoneda()});
                 
                 estado.getMovimientos().sort((mov1, mov2) -> mov1.getFecha().compareTo(mov2.getFecha()));       
-                for (Movimiento p : estado.getMovimientos()){
-                    modelo3.addRow(new Object[] { formato.format(p.getFecha()), p.getDescripcion(), p.getTipo(), p.getCantidad()}); 
+                for (Movimiento m : estado.getMovimientos()){
+                    if(m.getTipo() == Tipo.DEPOSITO){
+                        modelo3.addRow(new Object[] { formato.format(m.getFecha()), m.getDescripcion(), m.getCantidad()});      
+                    }else if (m.getTipo() == Tipo.RETIRO){
+                        modelo3.addRow(new Object[] {formato.format(m.getFecha()), m.getDescripcion(), "", m.getCantidad()}); 
+                    }
+                    
                 }
                 
             }
