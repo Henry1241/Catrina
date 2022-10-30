@@ -107,9 +107,6 @@ public class Cuenta extends javax.swing.JFrame {
 
         tblResumen.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {""},
-                {""},
-                {""},
                 {""}
             },
             new String [] {
@@ -279,59 +276,73 @@ public class Cuenta extends javax.swing.JFrame {
 
     private void btnSeleccionaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionaActionPerformed
         // TODO add your handling code here:
-        try{
+        try {
             JFileChooser filechooser = new JFileChooser();
-            filechooser.setCurrentDirectory(new File (System.getProperty("user.home")));
-            if (filechooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+            filechooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+            if (filechooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File archivo = filechooser.getSelectedFile();
-                
+
                 byte archivoByte[] = Files.readAllBytes(archivo.toPath());
-                
+
                 String contenido = new String(archivoByte, StandardCharsets.UTF_8);
-                
+
                 estadoCuenta estado = new estadoCuenta().deserializar(contenido);
-                
-                Movimiento producto = new Movimiento();
-                
-                
+
+                Movimiento movimiento = new Movimiento();
+
                 DateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-                
+
                 DefaultTableModel modelo1 = (DefaultTableModel) tblMario.getModel();
                 modelo1.setRowCount(0);
-                
+
                 DefaultTableModel modelo2 = (DefaultTableModel) tblCuenta.getModel();
                 modelo2.setRowCount(0);
-                
+
                 DefaultTableModel modelo3 = (DefaultTableModel) tblDetalle.getModel();
                 modelo3.setRowCount(0);
-                
+
                 DefaultTableModel modelo4 = (DefaultTableModel) tblResumen.getModel();
                 modelo4.setRowCount(0);
-                
-                modelo1.addRow(new Object[] {estado.getCliente().getRfc()});
-                modelo1.addRow(new Object[] {estado.getCliente().getDomicilio()});
-                modelo1.addRow(new Object[] {estado.getCliente().getCiudad()});
-                modelo1.addRow(new Object[] {estado.getCliente().getCp()});
-                
-                modelo2.addRow(new Object[] {estado.getCuenta()});
-                modelo2.addRow(new Object[] {estado.getClabe()});
-                modelo2.addRow(new Object[] {estado.getMoneda()});
-                
-                estado.getMovimientos().sort((mov1, mov2) -> mov1.getFecha().compareTo(mov2.getFecha()));       
-                for (Movimiento m : estado.getMovimientos()){
-                    if(m.getTipo() == Tipo.DEPOSITO){
-                        modelo3.addRow(new Object[] { formato.format(m.getFecha()), m.getDescripcion(), m.getCantidad()});      
-                    }else if (m.getTipo() == Tipo.RETIRO){
-                        modelo3.addRow(new Object[] {formato.format(m.getFecha()), m.getDescripcion(), "", m.getCantidad()}); 
+
+                modelo1.addRow(new Object[]{estado.getCliente().getRfc()});
+                modelo1.addRow(new Object[]{estado.getCliente().getDomicilio()});
+                modelo1.addRow(new Object[]{estado.getCliente().getCiudad()});
+                modelo1.addRow(new Object[]{estado.getCliente().getCp()});
+
+                modelo2.addRow(new Object[]{estado.getCuenta()});
+                modelo2.addRow(new Object[]{estado.getClabe()});
+                modelo2.addRow(new Object[]{estado.getMoneda()});
+
+                estado.getMovimientos().sort((mov1, mov2) -> mov1.getFecha().compareTo(mov2.getFecha()));
+                for (Movimiento m : estado.getMovimientos()) {
+                    if (m.getTipo() == Tipo.DEPOSITO) {
+                        modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), m.getCantidad()});
+                    } else if (m.getTipo() == Tipo.RETIRO) {
+                        modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), "", m.getCantidad()});
                     }
-                   
-                modelo4.addRow(new Object[] {estado.getMes()});
+
+                    double totalDepo = 0;
+                    double totalRet = 0;
+                        
+                    modelo4.addRow(new Object[]{""});
+                    for (int i = 1; i < 13; i++) {
+                        
+                        if (m.getTipo() == Tipo.DEPOSITO) {
+                            totalDepo += m.getCantidad();
+                            
+                        } else if (m.getTipo() == Tipo.RETIRO) {
+                            totalRet += m.getCantidad();
+                           
+                        }
+
+                    }
+                    modelo4.addRow(new Object[]{totalDepo});
+                    modelo4.addRow(new Object[] {totalRet});
                 }
             }
-        
-                
-        }catch (Exception ex){
-             System.err.println("Ocurrio un error " + ex.getMessage());
+
+        } catch (Exception ex) {
+            System.err.println("Ocurrio un error " + ex.getMessage());
         }
     }//GEN-LAST:event_btnSeleccionaActionPerformed
 

@@ -7,6 +7,8 @@ package mx.itson.catrina.entidades;
 
 import com.google.gson.Gson;
 import java.util.List;
+import mx.itson.catrina.enumeradores.Tipo;
+import static mx.itson.catrina.enumeradores.Tipo.DEPOSITO;
 
 /**
  *
@@ -30,6 +32,18 @@ public class estadoCuenta {
             System.err.println("Ocurrio un error" + ex.getMessage());
         }
         return catrina;
+    }
+        public double suma(List<Movimiento> listaMovimientos){
+            double resultado = 0;
+            
+            for(Movimiento m : listaMovimientos){
+                    switch(m.getTipo()){
+                        case DEPOSITO -> resultado += m.getCantidad();
+                        case RETIRO -> resultado -= m.getCantidad();
+                        default -> throw new AssertionError();
+                    }
+                }
+        return resultado;
 }
    
     /**
@@ -115,8 +129,8 @@ public class estadoCuenta {
     public void setMes(String combMes) {
         this.mes = combMes;
     }
-    
-    public void estado(){
+            
+    public void Mes(){
         
         switch  (mes) {
             
