@@ -19,7 +19,6 @@ public class estadoCuenta {
     private String cuenta;
     private String clabe;
     private String moneda;
-    private String mes;
     private Cliente cliente;
     private List<Movimiento> movimientos;
    
@@ -33,18 +32,33 @@ public class estadoCuenta {
         }
         return catrina;
     }
-        public double suma(List<Movimiento> listaMovimientos){
-            double resultado = 0;
+        
+        public double sumaDep(List<Movimiento> listaDepo){
+            double totalDepo = 0;
             
-            for(Movimiento m : listaMovimientos){
-                    switch(m.getTipo()){
-                        case DEPOSITO -> resultado += m.getCantidad();
-                        case RETIRO -> resultado -= m.getCantidad();
-                        default -> throw new AssertionError();
+            for(Movimiento m : listaDepo){
+                    if(m.getTipo() == Tipo.DEPOSITO){
+                        totalDepo += m.getCantidad();
                     }
-                }
+
+            }
+        return totalDepo;
+        }
+        public double sumaRet(List<Movimiento> listaRet){
+            double totalRet = 0;
+            
+            for(Movimiento m : listaRet){
+                    if(m.getTipo() == Tipo.RETIRO){
+                        totalRet += m.getCantidad();
+                    }
+
+            }
+        return totalRet;
+        }
+        public double suma(Movimiento suma){
+            double resultado = sumaDep(movimientos)- sumaRet(movimientos);
         return resultado;
-}
+    }
    
     /**
      * @return the cliente
@@ -115,72 +129,6 @@ public class estadoCuenta {
     public void setMoneda(String moneda) {
         this.moneda = moneda;
     }
+            
     
-    /**
-     * @return the Mes
-     */
-    public String getMes() {
-        return mes;
-    }
-
-    /**
-     * @param combMes the combMes to set
-     */
-    public void setMes(String combMes) {
-        this.mes = combMes;
-    }
-            
-    public void Mes(){
-        
-        switch  (mes) {
-            
-            case "Enero":
-                setMes("1");
-                break;          
-                
-                case "Febrero":
-                setMes("2");
-                break;
-                
-                case "Marzo":
-                setMes("3");
-                break;
-                
-                case "Abril":
-                setMes("4");
-                break;
-                
-                case "Mayo":
-                setMes("5");
-                break;
-                
-                case "Junio":
-                setMes("6");
-                break;
-                
-                case "Julio":
-                setMes("7");
-                break;
-                
-                case "Agosto":
-                setMes("8");
-                break;
-                
-                case "Septiembre":
-                setMes("9");
-                break;
-                
-                case "Octubre":
-                setMes("10");
-                break;
-                
-                case "Noviembre":
-                setMes("11");
-                break;
-                
-                case "Diciembre":
-                setMes("12");
-                break;
-        }
-    }
 }

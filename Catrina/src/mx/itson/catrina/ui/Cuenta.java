@@ -377,31 +377,27 @@ public class Cuenta extends javax.swing.JFrame {
                         subTotal = subDepo - subRet;
                         modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), "", m.getCantidad(), subTotal});
 
-                        double ms = movimiento.getCantidad();
-
-                        int saldoI = 2000000;
-                        double totalDepo = 0;
-                        double totalRet = 0;
-
-                        modelo4.addRow(new Object[]{saldoI});
-                        if (movimiento.getTipo() == Tipo.DEPOSITO) {
-                            totalDepo += ms;
-
-                        } else if (movimiento.getTipo() == Tipo.RETIRO) {
-                            totalRet += ms;
-                        }
-                        modelo4.addRow(new Object[]{totalDepo});
-                        modelo4.addRow(new Object[]{totalRet});
-                        subDepo += ms;
-                        subRet -= ms;
-                        subTotal = subDepo - subRet;
-                        modelo4.addRow(new Object[]{subTotal});
-                        String sub = String.valueOf(subTotal);
-
-                        lblFinal.setText(sub);
                     }
 
                 }
+      
+                estadoCuenta m = new estadoCuenta().deserializar(contenido);
+                int saldoI = 2000000;
+                
+                
+
+                        modelo4.addRow(new Object[]{saldoI});
+                        modelo4.addRow(new Object[]{m.sumaDep(m.getMovimientos())});
+                        modelo4.addRow(new Object[]{m.sumaRet(m.getMovimientos())});
+     
+                        double subTotal = 0;
+                        
+                        
+                        modelo4.addRow(new Object[]{m.suma(movimiento)});
+                        
+                        String sub = String.valueOf(m.suma(movimiento));
+
+                        lblFinal.setText(sub);
 
             }
 
