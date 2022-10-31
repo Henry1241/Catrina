@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.catrina.entidades.estadoCuenta;
@@ -90,8 +91,19 @@ public class Cuenta extends javax.swing.JFrame {
             new String [] {
                 "MARIO ABURTO"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblMario);
+        if (tblMario.getColumnModel().getColumnCount() > 0) {
+            tblMario.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         tblCuenta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -102,18 +114,43 @@ public class Cuenta extends javax.swing.JFrame {
             new String [] {
                 "CUENTA CONTABLE"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(tblCuenta);
+        if (tblCuenta.getColumnModel().getColumnCount() > 0) {
+            tblCuenta.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         tblResumen.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {""}
+                {""},
+                {null},
+                {null},
+                {null}
             },
             new String [] {
                 "RESUMEN DEL PERIODO"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane3.setViewportView(tblResumen);
+        if (tblResumen.getColumnModel().getColumnCount() > 0) {
+            tblResumen.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         jLabel4.setText("DETALLE DE MOVIMIENTOS");
 
@@ -138,7 +175,15 @@ public class Cuenta extends javax.swing.JFrame {
             new String [] {
                 "FECHA", "DESCRIPCIÓN", "DEPÓSITO", "RETIRO", "SUBTOTAL"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane4.setViewportView(tblDetalle);
 
         jLabel5.setText("SALDO FINAL DEL PERIODO $");
@@ -158,7 +203,7 @@ public class Cuenta extends javax.swing.JFrame {
 
         jLabel11.setText("Depósitos");
 
-        jLabel12.setText("Saldo inicial");
+        jLabel12.setText("Saldo final");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -316,29 +361,50 @@ public class Cuenta extends javax.swing.JFrame {
                 estado.getMovimientos().sort((mov1, mov2) -> mov1.getFecha().compareTo(mov2.getFecha()));
                 for (Movimiento m : estado.getMovimientos()) {
                     if (m.getTipo() == Tipo.DEPOSITO) {
-                        modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), m.getCantidad()});
+                        double subDepo = 0;
+                        double subRet = 0;
+                        double subTotal = 0;
+                        subDepo += m.getCantidad();
+                        subRet -= m.getCantidad();
+                        subTotal = subDepo - subRet;
+                        modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), m.getCantidad(), "", subTotal});
                     } else if (m.getTipo() == Tipo.RETIRO) {
-                        modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), "", m.getCantidad()});
-                    }
+                        double subDepo = 0;
+                        double subRet = 0;
+                        double subTotal = 0;
+                        subDepo += m.getCantidad();
+                        subRet -= m.getCantidad();
+                        subTotal = subDepo - subRet;
+                        modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), "", m.getCantidad(), subTotal});
 
-                    double totalDepo = 0;
-                    double totalRet = 0;
-                        
-                    modelo4.addRow(new Object[]{""});
-                    for (int i = 1; i < 13; i++) {
-                        
-                        if (m.getTipo() == Tipo.DEPOSITO) {
-                            totalDepo += m.getCantidad();
-                            
-                        } else if (m.getTipo() == Tipo.RETIRO) {
-                            totalRet += m.getCantidad();
-                           
-                        }
+                    double ms = movimiento.getCantidad();
+              
 
-                    }
-                    modelo4.addRow(new Object[]{totalDepo});
-                    modelo4.addRow(new Object[] {totalRet});
+                int saldoI = 2000000;
+                double totalDepo = 0;
+                double totalRet = 0;
+
+                modelo4.addRow(new Object[]{saldoI});
+                if (movimiento.getTipo() == Tipo.DEPOSITO) {
+                    totalDepo += ms;
+                    
+                } else if (movimiento.getTipo() == Tipo.RETIRO) {
+                    totalRet += ms;
                 }
+                modelo4.addRow(new Object[]{totalDepo});
+                    modelo4.addRow(new Object[]{totalRet});
+                    subDepo += ms;
+                    subRet -= ms;
+                    subTotal = subDepo - subRet;
+                    modelo4.addRow(new Object[]{subTotal});
+                        String sub = String.valueOf(subTotal);
+
+                        lblFinal.setText(sub);
+                    }
+
+                    
+                }
+                
             }
 
         } catch (Exception ex) {
