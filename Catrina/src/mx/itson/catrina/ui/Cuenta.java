@@ -377,34 +377,32 @@ public class Cuenta extends javax.swing.JFrame {
                         subTotal = subDepo - subRet;
                         modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), "", m.getCantidad(), subTotal});
 
-                    double ms = movimiento.getCantidad();
-              
+                        double ms = movimiento.getCantidad();
 
-                int saldoI = 2000000;
-                double totalDepo = 0;
-                double totalRet = 0;
+                        int saldoI = 2000000;
+                        double totalDepo = 0;
+                        double totalRet = 0;
 
-                modelo4.addRow(new Object[]{saldoI});
-                if (movimiento.getTipo() == Tipo.DEPOSITO) {
-                    totalDepo += ms;
-                    
-                } else if (movimiento.getTipo() == Tipo.RETIRO) {
-                    totalRet += ms;
-                }
-                modelo4.addRow(new Object[]{totalDepo});
-                    modelo4.addRow(new Object[]{totalRet});
-                    subDepo += ms;
-                    subRet -= ms;
-                    subTotal = subDepo - subRet;
-                    modelo4.addRow(new Object[]{subTotal});
+                        modelo4.addRow(new Object[]{saldoI});
+                        if (movimiento.getTipo() == Tipo.DEPOSITO) {
+                            totalDepo += ms;
+
+                        } else if (movimiento.getTipo() == Tipo.RETIRO) {
+                            totalRet += ms;
+                        }
+                        modelo4.addRow(new Object[]{totalDepo});
+                        modelo4.addRow(new Object[]{totalRet});
+                        subDepo += ms;
+                        subRet -= ms;
+                        subTotal = subDepo - subRet;
+                        modelo4.addRow(new Object[]{subTotal});
                         String sub = String.valueOf(subTotal);
 
                         lblFinal.setText(sub);
                     }
 
-                    
                 }
-                
+
             }
 
         } catch (Exception ex) {
