@@ -9,8 +9,10 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.catrina.entidades.estadoCuenta;
@@ -336,6 +338,8 @@ public class Cuenta extends javax.swing.JFrame {
                 Movimiento movimiento = new Movimiento();
 
                 DateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                Locale local = new Locale("es", "MX");
+                NumberFormat formatMoneda = NumberFormat.getCurrencyInstance(local);
 
                 DefaultTableModel modelo1 = (DefaultTableModel) tblMario.getModel();
                 modelo1.setRowCount(0);
@@ -367,7 +371,7 @@ public class Cuenta extends javax.swing.JFrame {
                         subDepo += m.getCantidad();
                         subRet -= m.getCantidad();
                         subTotal = subDepo - subRet;
-                        modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), m.getCantidad(), "", subTotal});
+                        modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), formatMoneda.format(m.getCantidad()), "", formatMoneda.format(subTotal)});
                     } else if (m.getTipo() == Tipo.RETIRO) {
                         double subDepo = 0;
                         double subRet = 0;
@@ -375,29 +379,24 @@ public class Cuenta extends javax.swing.JFrame {
                         subDepo += m.getCantidad();
                         subRet -= m.getCantidad();
                         subTotal = subDepo - subRet;
-                        modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), "", m.getCantidad(), subTotal});
+                        modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), "", formatMoneda.format(m.getCantidad()), formatMoneda.format(subTotal)});
 
                     }
 
                 }
-      
+
                 estadoCuenta m = new estadoCuenta().deserializar(contenido);
-                int saldoI = 2000000;
-                
-                
 
-                        modelo4.addRow(new Object[]{saldoI});
-                        modelo4.addRow(new Object[]{m.sumaDep(m.getMovimientos())});
-                        modelo4.addRow(new Object[]{m.sumaRet(m.getMovimientos())});
-     
-                        double subTotal = 0;
-                        
-                        
-                        modelo4.addRow(new Object[]{m.suma(movimiento)});
-                        
-                        String sub = String.valueOf(m.suma(movimiento));
+                String saldoI = formatMoneda.format(20000.00);
 
-                        lblFinal.setText(sub);
+                modelo4.addRow(new Object[]{saldoI});
+                modelo4.addRow(new Object[]{formatMoneda.format(m.sumaDep(m.getMovimientos()))});
+                modelo4.addRow(new Object[]{formatMoneda.format(m.sumaRet(m.getMovimientos()))});
+                modelo4.addRow(new Object[]{formatMoneda.format(m.suma(movimiento))});
+
+                String sub = String.valueOf(formatMoneda.format(m.suma(movimiento)));
+
+                lblFinal.setText(sub);
 
             }
 
