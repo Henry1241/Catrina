@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
-import mx.itson.catrina.entidades.estadoCuenta;
+import mx.itson.catrina.entidades.EstadoCuenta;
 import mx.itson.catrina.entidades.Movimiento;
 import mx.itson.catrina.enumeradores.Tipo;
 
@@ -46,7 +46,7 @@ public class Cuenta extends javax.swing.JFrame {
         btnSelecciona = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblMario = new javax.swing.JTable();
+        tblCliente = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblCuenta = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -83,7 +83,7 @@ public class Cuenta extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel3.setText("ESTADO DE CUENTA");
 
-        tblMario.setModel(new javax.swing.table.DefaultTableModel(
+        tblCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null},
                 {null},
@@ -102,9 +102,9 @@ public class Cuenta extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tblMario);
-        if (tblMario.getColumnModel().getColumnCount() > 0) {
-            tblMario.getColumnModel().getColumn(0).setResizable(false);
+        jScrollPane1.setViewportView(tblCliente);
+        if (tblCliente.getColumnModel().getColumnCount() > 0) {
+            tblCliente.getColumnModel().getColumn(0).setResizable(false);
         }
 
         tblCuenta.setModel(new javax.swing.table.DefaultTableModel(
@@ -324,26 +324,43 @@ public class Cuenta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSeleccionaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionaActionPerformed
-        // TODO add your handling code here:
+        /**
+         * Usando Try Catch se identifica si se cumple la condicion para abrir un archivo correctamente.
+         * Se utiliza JFileChooser para llamar un archivo desde el disco de la PC.
+         */
         try {
             JFileChooser filechooser = new JFileChooser();
             filechooser.setCurrentDirectory(new File(System.getProperty("user.home")));
             if (filechooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File archivo = filechooser.getSelectedFile();
 
+                /**
+                 * archivoByte[] permire leer los archivos UTF_8.
+                 */
                 byte archivoByte[] = Files.readAllBytes(archivo.toPath());
 
                 String contenido = new String(archivoByte, StandardCharsets.UTF_8);
 
-                estadoCuenta estado = new estadoCuenta().deserializar(contenido);
+                /**
+                 * Se llama la clase EstadoCuenta para deserealizar los datos del Json.
+                 */
+                EstadoCuenta estado = new EstadoCuenta().deserializar(contenido);
 
                 Movimiento movimiento = new Movimiento();
 
+                /**
+                 * DateFormat se utiliza para otorgarle un formato a la fecha ingresada.
+                 * Locale se utiliza para otorgar formato a la cantidad de dinero ingresada.
+                 */
                 DateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                 Locale local = new Locale("es", "MX");
                 NumberFormat formatMoneda = NumberFormat.getCurrencyInstance(local);
 
-                DefaultTableModel modeloCliente = (DefaultTableModel) tblMario.getModel();
+                /**
+                 * DefaultTableModel se utiliza para llamar el modelo de una tabla y la tabla a la que se refiere.
+                 * setRowCount permite limitar lineas sobrantes en una tabla.
+                 */
+                DefaultTableModel modeloCliente = (DefaultTableModel) tblCliente.getModel();
                 modeloCliente.setRowCount(0);
 
                 DefaultTableModel modeloCuenta = (DefaultTableModel) tblCuenta.getModel();
@@ -355,16 +372,28 @@ public class Cuenta extends javax.swing.JFrame {
                 DefaultTableModel modeloResumen = (DefaultTableModel) tblResumen.getModel();
                 modeloResumen.setRowCount(0);
 
+                /**
+                 * modeloCliente.addRow permite añadir los datos del Cliente a su tabla correspondiente.
+                 */
                 modeloCliente.addRow(new Object[]{estado.getCliente().getRfc()});
                 modeloCliente.addRow(new Object[]{estado.getCliente().getDomicilio()});
                 modeloCliente.addRow(new Object[]{estado.getCliente().getCiudad()});
                 modeloCliente.addRow(new Object[]{estado.getCliente().getCp()});
 
+                /**
+                 * modeloCuenta.addRow permite añadir los datos de la cuenta contable a su tabla correspondiente.
+                 */
                 modeloCuenta.addRow(new Object[]{estado.getCuenta()});
                 modeloCuenta.addRow(new Object[]{estado.getClabe()});
                 modeloCuenta.addRow(new Object[]{estado.getMoneda()});
 
+                // El metodo siguiente permite organizar datos a traves de una comparacion, en este caso se ordenan las fechas de menor a mayor.
                 estado.getMovimientos().sort((mov1, mov2) -> mov1.getFecha().compareTo(mov2.getFecha()));
+                /**
+                 * Con el uso de un for se declara la clase Movimiento y se añade una condicion para determinar si el tipo es deposito o retiro.
+                 * Si es deposito se suman todos los depositos y calcula una parte del subTotal.
+                 * Si es retiro se suman todos los depositos y se resta el total de depositos y retiros.
+                 */
                 for (Movimiento m : estado.getMovimientos()) {
                     if (m.getTipo() == Tipo.DEPOSITO) {
                         double subDepo = 0;
@@ -387,15 +416,21 @@ public class Cuenta extends javax.swing.JFrame {
 
                 }
 
-                estadoCuenta estadoCuen = new estadoCuenta().deserializar(contenido);
+                /**
+                 * Se llama a la clase EstadoCuenta para desearealizar y obtener los datos del Jaon.
+                 */
+                EstadoCuenta estadoCuen = new EstadoCuenta().deserializar(contenido);
 
-                
+                /**
+                 * En modeloResumen.addRow se añaden los datos del resumen en su tabla correspondiente.
+                 */
                 modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.saldoInicial((11)))});
                 modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.sumaDep(estadoCuen.getMovimientos()))});
                 modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.sumaRet(estadoCuen.getMovimientos()))});
-                modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.suma(movimiento) + estadoCuen.saldoInicial(11))});
+                modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.suma(HEIGHT) + estadoCuen.saldoInicial(11))});
 
-                String sub = String.valueOf(formatMoneda.format(estadoCuen.suma(movimiento) + estadoCuen.saldoInicial(11)));
+                //Se convierte un valor de tipo double a tipo String para imprimir en un label.
+                String sub = String.valueOf(formatMoneda.format(estadoCuen.suma(HEIGHT) + estadoCuen.saldoInicial(11)));
 
                 lblFinal.setText(sub);
 
@@ -461,9 +496,9 @@ public class Cuenta extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lblFinal;
+    private javax.swing.JTable tblCliente;
     private javax.swing.JTable tblCuenta;
     private javax.swing.JTable tblDetalle;
-    private javax.swing.JTable tblMario;
     private javax.swing.JTable tblResumen;
     // End of variables declaration//GEN-END:variables
 }

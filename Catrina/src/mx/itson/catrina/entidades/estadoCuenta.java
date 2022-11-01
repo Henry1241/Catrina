@@ -11,9 +11,9 @@ import mx.itson.catrina.enumeradores.Tipo;
 
 /**
  *
- * @author enri0
+ * @author Enrique Gonzalez
  */
-public class estadoCuenta {
+public class EstadoCuenta {
 
     private String cuenta;
     private String clabe;
@@ -22,17 +22,25 @@ public class estadoCuenta {
     private Cliente cliente;
     private List<Movimiento> movimientos;
     
-
-    public estadoCuenta deserializar(String json) {
-        estadoCuenta catrina = new estadoCuenta();
+/**
+ * El metodo se encarga de deserealizar los datos del Json para obtenerlos y usarlos.
+ * @param json
+ * @return Regresa datos declarados en la clase EstadoCuenta.
+ */
+    public EstadoCuenta deserializar(String json) {
+        EstadoCuenta estadoC = new EstadoCuenta();
         try {
-            catrina = new Gson().fromJson(json, estadoCuenta.class);
+            estadoC = new Gson().fromJson(json, EstadoCuenta.class);
         } catch (Exception ex) {
             System.err.println("Ocurrio un error" + ex.getMessage());
         }
-        return catrina;
+        return estadoC;
     }
-
+/**
+ * Este metodo suma todos los valores de tipo Deposito.
+ * @param listaDepo
+ * @return Regresa la suma de los depositos.
+ */
     public double sumaDep(List<Movimiento> listaDepo) {
         double totalDepo = 0;
 
@@ -44,7 +52,11 @@ public class estadoCuenta {
         }
         return totalDepo;
     }
-
+/**
+ * Este metodo se encarfa de sumar todos los valores de tipo Retiro.
+ * @param listaRet
+ * @return Regresa el total de los retiros.
+ */
     public double sumaRet(List<Movimiento> listaRet) {
         double totalRet = 0;
 
@@ -56,9 +68,13 @@ public class estadoCuenta {
         }
         return totalRet;
     }
-
-    public double suma(Movimiento suma) {
-        double resultado = sumaDep(movimientos) - sumaRet(movimientos);
+/**
+ * El metodo se encarga de restar el total de los depositos y el total de los retiros para obtener el subTotal.
+ * @param resultado
+ * @return 
+ */
+    public double suma(double resultado) {
+        double suma = sumaDep(movimientos) - sumaRet(movimientos);
         return resultado;
     }
 

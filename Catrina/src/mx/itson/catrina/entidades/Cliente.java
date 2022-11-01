@@ -7,7 +7,7 @@ package mx.itson.catrina.entidades;
 
 /**
  *
- * @author enri0
+ * @author Enrique Gonzalez
  */
 public class Cliente {
 

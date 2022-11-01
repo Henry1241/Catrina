@@ -10,7 +10,7 @@ import mx.itson.catrina.enumeradores.Tipo;
 
 /**
  *
- * @author enri0
+ * @author Enrique Gonzalez
  */
 public class Movimiento {
 
