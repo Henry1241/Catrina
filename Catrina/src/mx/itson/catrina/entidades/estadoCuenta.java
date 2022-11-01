@@ -8,7 +8,6 @@ package mx.itson.catrina.entidades;
 import com.google.gson.Gson;
 import java.util.List;
 import mx.itson.catrina.enumeradores.Tipo;
-import static mx.itson.catrina.enumeradores.Tipo.DEPOSITO;
 
 /**
  *
@@ -19,47 +18,82 @@ public class estadoCuenta {
     private String cuenta;
     private String clabe;
     private String moneda;
+    private int mes = 11;
     private Cliente cliente;
     private List<Movimiento> movimientos;
-   
     
-    public estadoCuenta deserializar(String json){
+
+    public estadoCuenta deserializar(String json) {
         estadoCuenta catrina = new estadoCuenta();
-        try{
+        try {
             catrina = new Gson().fromJson(json, estadoCuenta.class);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.err.println("Ocurrio un error" + ex.getMessage());
         }
         return catrina;
     }
-        
-        public double sumaDep(List<Movimiento> listaDepo){
-            double totalDepo = 0;
-            
-            for(Movimiento m : listaDepo){
-                    if(m.getTipo() == Tipo.DEPOSITO){
-                        totalDepo += m.getCantidad();
-                    }
 
+    public double sumaDep(List<Movimiento> listaDepo) {
+        double totalDepo = 0;
+
+        for (Movimiento m : listaDepo) {
+            if (m.getTipo() == Tipo.DEPOSITO) {
+                totalDepo += m.getCantidad();
             }
+
+        }
         return totalDepo;
-        }
-        public double sumaRet(List<Movimiento> listaRet){
-            double totalRet = 0;
-            
-            for(Movimiento m : listaRet){
-                    if(m.getTipo() == Tipo.RETIRO){
-                        totalRet += m.getCantidad();
-                    }
+    }
 
+    public double sumaRet(List<Movimiento> listaRet) {
+        double totalRet = 0;
+
+        for (Movimiento m : listaRet) {
+            if (m.getTipo() == Tipo.RETIRO) {
+                totalRet += m.getCantidad();
             }
-        return totalRet;
+
         }
-        public double suma(Movimiento suma){
-            double resultado = sumaDep(movimientos)- sumaRet(movimientos);
+        return totalRet;
+    }
+
+    public double suma(Movimiento suma) {
+        double resultado = sumaDep(movimientos) - sumaRet(movimientos);
         return resultado;
     }
-   
+
+    /**
+     * @return the mes
+     */
+    public int getMes() {
+        return mes;
+    }
+
+    /**
+     * @param boxMes the boxMes to set
+     */
+    public void setMes(int boxMes) {
+        this.mes = boxMes;
+    }
+    
+    public double saldoInicial(int mes) {
+         
+        double saldoInicial = 0;
+        for (Movimiento m : this.movimientos) {
+            
+            for (int i = 0; i < mes; i++) {
+                if (m.getFecha().getMonth() == i && m.getTipo() == Tipo.DEPOSITO) {
+                    saldoInicial += m.getCantidad();
+                } else if (m.getFecha().getMonth() == i && m.getTipo() == Tipo.RETIRO) {
+                    saldoInicial -= m.getCantidad();
+                }
+            }
+        }
+
+        return saldoInicial;
+        
+    }
+
     /**
      * @return the cliente
      */
@@ -71,8 +105,8 @@ public class estadoCuenta {
      * @return the movimientos
      */
     public List<Movimiento> getMovimientos() {
-       return movimientos;
-        
+        return movimientos;
+
     }
 
     /**
@@ -88,6 +122,7 @@ public class estadoCuenta {
     public void setEstado(List<Movimiento> producto) {
         this.movimientos = producto;
     }
+
     /**
      * @return the cuenta
      */
@@ -129,6 +164,5 @@ public class estadoCuenta {
     public void setMoneda(String moneda) {
         this.moneda = moneda;
     }
-            
-    
+
 }

@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
@@ -68,6 +67,7 @@ public class Cuenta extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         combMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Enero", "Febrero", "Merzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
+        combMes.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel1.setText("Seleccione el mes");
 
@@ -226,8 +226,8 @@ public class Cuenta extends javax.swing.JFrame {
                                     .addComponent(jLabel8)
                                     .addComponent(jLabel7))
                                 .addGap(7, 7, 7))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -285,21 +285,23 @@ public class Cuenta extends javax.swing.JFrame {
                 .addGap(38, 38, 38)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel7)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel8)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel9))
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel9))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(33, 33, 33))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel11)
@@ -369,16 +371,16 @@ public class Cuenta extends javax.swing.JFrame {
                         double subRet = 0;
                         double subTotal = 0;
                         subDepo += m.getCantidad();
-                        subRet -= m.getCantidad();
                         subTotal = subDepo - subRet;
+                        
                         modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), formatMoneda.format(m.getCantidad()), "", formatMoneda.format(subTotal)});
                     } else if (m.getTipo() == Tipo.RETIRO) {
                         double subDepo = 0;
                         double subRet = 0;
                         double subTotal = 0;
-                        subDepo += m.getCantidad();
                         subRet -= m.getCantidad();
                         subTotal = subDepo - subRet;
+                        
                         modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), "", formatMoneda.format(m.getCantidad()), formatMoneda.format(subTotal)});
 
                     }
@@ -387,14 +389,13 @@ public class Cuenta extends javax.swing.JFrame {
 
                 estadoCuenta m = new estadoCuenta().deserializar(contenido);
 
-                String saldoI = formatMoneda.format(20000.00);
-
-                modelo4.addRow(new Object[]{saldoI});
+                
+                modelo4.addRow(new Object[]{formatMoneda.format(m.saldoInicial(m.getMes()))});
                 modelo4.addRow(new Object[]{formatMoneda.format(m.sumaDep(m.getMovimientos()))});
                 modelo4.addRow(new Object[]{formatMoneda.format(m.sumaRet(m.getMovimientos()))});
-                modelo4.addRow(new Object[]{formatMoneda.format(m.suma(movimiento))});
+                modelo4.addRow(new Object[]{formatMoneda.format(m.suma(movimiento) + m.saldoInicial(m.getMes()))});
 
-                String sub = String.valueOf(formatMoneda.format(m.suma(movimiento)));
+                String sub = String.valueOf(formatMoneda.format(m.suma(movimiento) + m.saldoInicial(m.getMes())));
 
                 lblFinal.setText(sub);
 
