@@ -343,26 +343,26 @@ public class Cuenta extends javax.swing.JFrame {
                 Locale local = new Locale("es", "MX");
                 NumberFormat formatMoneda = NumberFormat.getCurrencyInstance(local);
 
-                DefaultTableModel modelo1 = (DefaultTableModel) tblMario.getModel();
-                modelo1.setRowCount(0);
+                DefaultTableModel modeloCliente = (DefaultTableModel) tblMario.getModel();
+                modeloCliente.setRowCount(0);
 
-                DefaultTableModel modelo2 = (DefaultTableModel) tblCuenta.getModel();
-                modelo2.setRowCount(0);
+                DefaultTableModel modeloCuenta = (DefaultTableModel) tblCuenta.getModel();
+                modeloCuenta.setRowCount(0);
 
-                DefaultTableModel modelo3 = (DefaultTableModel) tblDetalle.getModel();
-                modelo3.setRowCount(0);
+                DefaultTableModel modeloDetalle = (DefaultTableModel) tblDetalle.getModel();
+                modeloDetalle.setRowCount(0);
 
-                DefaultTableModel modelo4 = (DefaultTableModel) tblResumen.getModel();
-                modelo4.setRowCount(0);
+                DefaultTableModel modeloResumen = (DefaultTableModel) tblResumen.getModel();
+                modeloResumen.setRowCount(0);
 
-                modelo1.addRow(new Object[]{estado.getCliente().getRfc()});
-                modelo1.addRow(new Object[]{estado.getCliente().getDomicilio()});
-                modelo1.addRow(new Object[]{estado.getCliente().getCiudad()});
-                modelo1.addRow(new Object[]{estado.getCliente().getCp()});
+                modeloCliente.addRow(new Object[]{estado.getCliente().getRfc()});
+                modeloCliente.addRow(new Object[]{estado.getCliente().getDomicilio()});
+                modeloCliente.addRow(new Object[]{estado.getCliente().getCiudad()});
+                modeloCliente.addRow(new Object[]{estado.getCliente().getCp()});
 
-                modelo2.addRow(new Object[]{estado.getCuenta()});
-                modelo2.addRow(new Object[]{estado.getClabe()});
-                modelo2.addRow(new Object[]{estado.getMoneda()});
+                modeloCuenta.addRow(new Object[]{estado.getCuenta()});
+                modeloCuenta.addRow(new Object[]{estado.getClabe()});
+                modeloCuenta.addRow(new Object[]{estado.getMoneda()});
 
                 estado.getMovimientos().sort((mov1, mov2) -> mov1.getFecha().compareTo(mov2.getFecha()));
                 for (Movimiento m : estado.getMovimientos()) {
@@ -373,7 +373,7 @@ public class Cuenta extends javax.swing.JFrame {
                         subDepo += m.getCantidad();
                         subTotal = subDepo - subRet;
                         
-                        modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), formatMoneda.format(m.getCantidad()), "", formatMoneda.format(subTotal)});
+                        modeloDetalle.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), formatMoneda.format(m.getCantidad()), "", formatMoneda.format(subTotal)});
                     } else if (m.getTipo() == Tipo.RETIRO) {
                         double subDepo = 0;
                         double subRet = 0;
@@ -381,21 +381,21 @@ public class Cuenta extends javax.swing.JFrame {
                         subRet -= m.getCantidad();
                         subTotal = subDepo - subRet;
                         
-                        modelo3.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), "", formatMoneda.format(m.getCantidad()), formatMoneda.format(subTotal)});
+                        modeloDetalle.addRow(new Object[]{formato.format(m.getFecha()), m.getDescripcion(), "", formatMoneda.format(m.getCantidad()), formatMoneda.format(subTotal)});
 
                     }
 
                 }
 
-                estadoCuenta m = new estadoCuenta().deserializar(contenido);
+                estadoCuenta estadoCuen = new estadoCuenta().deserializar(contenido);
 
                 
-                modelo4.addRow(new Object[]{formatMoneda.format(m.saldoInicial(m.getMes()))});
-                modelo4.addRow(new Object[]{formatMoneda.format(m.sumaDep(m.getMovimientos()))});
-                modelo4.addRow(new Object[]{formatMoneda.format(m.sumaRet(m.getMovimientos()))});
-                modelo4.addRow(new Object[]{formatMoneda.format(m.suma(movimiento) + m.saldoInicial(m.getMes()))});
+                modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.saldoInicial((11)))});
+                modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.sumaDep(estadoCuen.getMovimientos()))});
+                modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.sumaRet(estadoCuen.getMovimientos()))});
+                modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.suma(movimiento) + estadoCuen.saldoInicial(11))});
 
-                String sub = String.valueOf(formatMoneda.format(m.suma(movimiento) + m.saldoInicial(m.getMes())));
+                String sub = String.valueOf(formatMoneda.format(estadoCuen.suma(movimiento) + estadoCuen.saldoInicial(11)));
 
                 lblFinal.setText(sub);
 
