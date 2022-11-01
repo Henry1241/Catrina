@@ -416,21 +416,18 @@ public class Cuenta extends javax.swing.JFrame {
 
                 }
 
-                /**
-                 * Se llama a la clase EstadoCuenta para desearealizar y obtener los datos del Jaon.
-                 */
-                EstadoCuenta estadoCuen = new EstadoCuenta().deserializar(contenido);
+        
 
                 /**
                  * En modeloResumen.addRow se añaden los datos del resumen en su tabla correspondiente.
                  */
-                modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.saldoInicial((11)))});
-                modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.sumaDep(estadoCuen.getMovimientos()))});
-                modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.sumaRet(estadoCuen.getMovimientos()))});
-                modeloResumen.addRow(new Object[]{formatMoneda.format(estadoCuen.suma(HEIGHT) + estadoCuen.saldoInicial(11))});
+                modeloResumen.addRow(new Object[]{formatMoneda.format(estado.saldoInicial((11)))});
+                modeloResumen.addRow(new Object[]{formatMoneda.format(estado.sumaDep(estado.getMovimientos()))});
+                modeloResumen.addRow(new Object[]{formatMoneda.format(estado.sumaRet(estado.getMovimientos()))});
+                modeloResumen.addRow(new Object[]{formatMoneda.format(estado.suma(HEIGHT) + estado.saldoInicial(11))});
 
                 //Se convierte un valor de tipo double a tipo String para imprimir en un label.
-                String sub = String.valueOf(formatMoneda.format(estadoCuen.suma(HEIGHT) + estadoCuen.saldoInicial(11)));
+                String sub = String.valueOf(formatMoneda.format(estado.suma(HEIGHT) + estado.saldoInicial(11)));
 
                 lblFinal.setText(sub);
 
