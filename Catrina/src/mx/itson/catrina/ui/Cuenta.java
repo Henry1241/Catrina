@@ -421,13 +421,13 @@ public class Cuenta extends javax.swing.JFrame {
                 /**
                  * En modeloResumen.addRow se añaden los datos del resumen en su tabla correspondiente.
                  */
-                modeloResumen.addRow(new Object[]{formatMoneda.format(estado.saldoInicial((11)))});
+                modeloResumen.addRow(new Object[]{formatMoneda.format(estado.saldoInicial((combMes.getSelectedIndex())))});
                 modeloResumen.addRow(new Object[]{formatMoneda.format(estado.sumaDep(estado.getMovimientos()))});
                 modeloResumen.addRow(new Object[]{formatMoneda.format(estado.sumaRet(estado.getMovimientos()))});
-                modeloResumen.addRow(new Object[]{formatMoneda.format(estado.suma(HEIGHT) + estado.saldoInicial(11))});
+                modeloResumen.addRow(new Object[]{formatMoneda.format(estado.suma(HEIGHT) + estado.saldoInicial(combMes.getSelectedIndex()))});
 
                 //Se convierte un valor de tipo double a tipo String para imprimir en un label.
-                String sub = String.valueOf(formatMoneda.format(estado.suma(HEIGHT) + estado.saldoInicial(11)));
+                String sub = String.valueOf(formatMoneda.format(estado.suma(HEIGHT) + estado.saldoInicial(combMes.getSelectedIndex())));
 
                 lblFinal.setText(sub);
 
