@@ -18,7 +18,7 @@ public class EstadoCuenta {
     private String cuenta;
     private String clabe;
     private String moneda;
-    private int mes = 11;
+    private int mes;
     private Cliente cliente;
     private List<Movimiento> movimientos;
     
