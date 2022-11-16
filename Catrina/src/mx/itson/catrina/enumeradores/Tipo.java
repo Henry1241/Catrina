@@ -8,8 +8,9 @@ package mx.itson.catrina.enumeradores;
 import com.google.gson.annotations.SerializedName;
 
 /**
- *
- * @author enri0
+ * El enmumerador se encarga de especificar si se trata de un deposito o un 
+ * retiro usando un numero como identificador.
+ * @author Enrique Gonzalez
  */
 public enum Tipo {
     

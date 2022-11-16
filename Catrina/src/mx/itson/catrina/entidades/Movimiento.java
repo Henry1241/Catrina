@@ -9,7 +9,8 @@ import java.util.Date;
 import mx.itson.catrina.enumeradores.Tipo;
 
 /**
- *
+ * La clase contiene los datos especificos de los movimientos bancarios para 
+ * identificarlos y almacenarlos.
  * @author Enrique Gonzalez
  */
 public class Movimiento {

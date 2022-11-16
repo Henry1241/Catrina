@@ -19,8 +19,9 @@ import mx.itson.catrina.entidades.Movimiento;
 import mx.itson.catrina.enumeradores.Tipo;
 
 /**
- *
- * @author enri0
+ * La clase usa un JFrame donde se solicita el archivo Json y envía los datos a 
+ * sus respectivas tablas.
+ * @author Enrique Gonzalez
  */
 public class Cuenta extends javax.swing.JFrame {
 

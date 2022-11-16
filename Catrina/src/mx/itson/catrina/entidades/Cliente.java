@@ -6,7 +6,8 @@
 package mx.itson.catrina.entidades;
 
 /**
- *
+ * La clase contiene los datos ordenados del cliente para que el archivo Json 
+ * los identifque y los reciba en sus respectivos campos.
  * @author Enrique Gonzalez
  */
 public class Cliente {

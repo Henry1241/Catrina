@@ -10,7 +10,8 @@ import java.util.List;
 import mx.itson.catrina.enumeradores.Tipo;
 
 /**
- *
+ * La clase contiene los datos generales del Json y se encarga de deserealizar 
+ * los datos del Json.
  * @author Enrique Gonzalez
  */
 public class EstadoCuenta {
